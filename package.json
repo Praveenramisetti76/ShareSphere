@@ -1,0 +1,19 @@
+{
+  "name": "sharesphere",
+  "version": "1.0.0",
+  "description": "A community-driven platform for sharing and exchanging items",
+  "main": "index.js",
+  "scripts": {
+    "dev": "concurrently \"npm run server\" \"npm run client\"",
+    "server": "cd backend && npm run dev",
+    "client": "cd frontend && npm start",
+    "install-all": "npm install && cd backend && npm install && cd ../frontend && npm install",
+    "build": "cd frontend && npm run build"
+  },
+  "keywords": ["sharing", "community", "sustainability", "exchange"],
+  "author": "ShareSphere Team",
+  "license": "MIT",
+  "devDependencies": {
+    "concurrently": "^8.2.2"
+  }
+} 
