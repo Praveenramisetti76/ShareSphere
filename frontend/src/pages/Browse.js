@@ -19,9 +19,15 @@ const Browse = () => {
 
   const { data, isLoading, error } = useQuery(
     ['items', filters],
-    () => api.get('/api/items', { params: filters }),
+    () => {
+      const cleanFilters = Object.fromEntries(
+        Object.entries(filters).filter(([_, v]) => v !== '' && v !== undefined && v !== null)
+      );
+      return api.get('/api/items', { params: cleanFilters });
+    },
     {
       keepPreviousData: true,
+      refetchInterval: 10000, // Poll every 10 seconds
     }
   );
 
@@ -224,6 +230,25 @@ const Browse = () => {
                       <div className="text-lg font-semibold text-gray-900 mb-3">
                         ${item.price}
                       </div>
+                    )}
+
+                    {/* Quantity */}
+                    {item.quantity && (
+                      <div className="text-sm text-gray-500 mb-2">Quantity: {item.quantity}</div>
+                    )}
+
+                    {/* Tags */}
+                    {item.tags && item.tags.length > 0 && (
+                      <div className="flex flex-wrap gap-1 mb-2">
+                        {item.tags.map((tag, idx) => (
+                          <span key={idx} className="bg-gray-100 text-gray-700 px-2 py-0.5 rounded text-xs">{tag}</span>
+                        ))}
+                      </div>
+                    )}
+
+                    {/* Date of upload */}
+                    {item.createdAt && (
+                      <div className="text-xs text-gray-400 mb-2">Uploaded: {new Date(item.createdAt).toLocaleDateString()}</div>
                     )}
 
                     <div className="flex items-center justify-between text-sm text-gray-500 mb-3">
