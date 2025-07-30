@@ -26,9 +26,10 @@ const Navbar = () => {
     navigate('/');
   };
 
+  // Only show 'Browse' if authenticated
   const navItems = [
     { name: 'Home', path: '/', icon: Home },
-    { name: 'Browse', path: '/browse', icon: Search },
+    // 'Browse' will be conditionally added below
   ];
 
   const authItems = [
@@ -54,20 +55,32 @@ const Navbar = () => {
 
           {/* Desktop Navigation */}
           <div className="hidden md:flex items-center space-x-8">
-            {navItems.map((item) => (
+            <Link
+              key="Home"
+              to="/"
+              className={`flex items-center space-x-1 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
+                isActive('/')
+                  ? 'text-primary-600 bg-primary-50'
+                  : 'text-gray-700 hover:text-primary-600 hover:bg-gray-50'
+              }`}
+            >
+              <Home className="w-4 h-4" />
+              <span>Home</span>
+            </Link>
+            {isAuthenticated && (
               <Link
-                key={item.name}
-                to={item.path}
+                key="Browse"
+                to="/browse"
                 className={`flex items-center space-x-1 px-3 py-2 rounded-md text-sm font-medium transition-colors ${
-                  isActive(item.path)
+                  isActive('/browse')
                     ? 'text-primary-600 bg-primary-50'
                     : 'text-gray-700 hover:text-primary-600 hover:bg-gray-50'
                 }`}
               >
-                <item.icon className="w-4 h-4" />
-                <span>{item.name}</span>
+                <Search className="w-4 h-4" />
+                <span>Browse</span>
               </Link>
-            ))}
+            )}
           </div>
 
           {/* Desktop Auth Section */}
@@ -144,21 +157,34 @@ const Navbar = () => {
         {isMenuOpen && (
           <div className="md:hidden border-t border-gray-200 py-4">
             <div className="space-y-2">
-              {navItems.map((item) => (
+              <Link
+                key="Home"
+                to="/"
+                onClick={() => setIsMenuOpen(false)}
+                className={`flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium ${
+                  isActive('/')
+                    ? 'text-primary-600 bg-primary-50'
+                    : 'text-gray-700 hover:text-primary-600 hover:bg-gray-50'
+                }`}
+              >
+                <Home className="w-4 h-4" />
+                <span>Home</span>
+              </Link>
+              {isAuthenticated && (
                 <Link
-                  key={item.name}
-                  to={item.path}
+                  key="Browse"
+                  to="/browse"
                   onClick={() => setIsMenuOpen(false)}
                   className={`flex items-center space-x-2 px-3 py-2 rounded-md text-sm font-medium ${
-                    isActive(item.path)
+                    isActive('/browse')
                       ? 'text-primary-600 bg-primary-50'
                       : 'text-gray-700 hover:text-primary-600 hover:bg-gray-50'
                   }`}
                 >
-                  <item.icon className="w-4 h-4" />
-                  <span>{item.name}</span>
+                  <Search className="w-4 h-4" />
+                  <span>Browse</span>
                 </Link>
-              ))}
+              )}
               
               {isAuthenticated ? (
                 <>
