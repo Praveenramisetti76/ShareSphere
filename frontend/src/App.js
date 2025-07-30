@@ -13,6 +13,7 @@ import Profile from './pages/Profile';
 import Messages from './pages/Messages';
 import UserProfile from './pages/UserProfile';
 import NotFound from './pages/NotFound';
+import Cart from './pages/Cart';
 
 function App() {
   return (
@@ -25,6 +26,7 @@ function App() {
           <Route path="/browse" element={<Browse />} />
           <Route path="/item/:id" element={<ItemDetail />} />
           <Route path="/user/:id" element={<UserProfile />} />
+          <Route path="/cart" element={<Cart />} />
           
           {/* Protected Routes */}
           <Route path="/create" element={

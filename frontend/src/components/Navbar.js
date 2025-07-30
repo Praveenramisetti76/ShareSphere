@@ -11,7 +11,8 @@ import {
   Menu, 
   X,
   Heart,
-  Globe
+  Globe,
+  ShoppingCart
 } from 'lucide-react';
 
 const Navbar = () => {
@@ -33,6 +34,7 @@ const Navbar = () => {
   const authItems = [
     { name: 'Create Item', path: '/create', icon: Plus },
     { name: 'Messages', path: '/messages', icon: MessageCircle },
+    { name: 'Cart', path: '/cart', icon: ShoppingCart },
     { name: 'Profile', path: '/profile', icon: User },
   ];
 

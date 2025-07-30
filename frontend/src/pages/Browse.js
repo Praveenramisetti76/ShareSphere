@@ -2,8 +2,10 @@ import React, { useState } from 'react';
 import { useQuery } from 'react-query';
 import { Search, Filter, MapPin, Heart, Eye, User } from 'lucide-react';
 import api from '../utils/api';
+import { useAuth } from '../contexts/AuthContext';
 
 const Browse = () => {
+  const { user } = useAuth();
   const [filters, setFilters] = useState({
     search: '',
     category: '',
@@ -49,6 +51,18 @@ const Browse = () => {
     { value: 'price-high', label: 'Price: High to Low' },
     { value: 'popular', label: 'Most Popular' }
   ];
+
+  // Cart logic
+  const addToCart = (item) => {
+    let cart = JSON.parse(localStorage.getItem('cart') || '[]');
+    if (cart.find(i => i._id === item._id)) {
+      alert('Item already in cart');
+      return;
+    }
+    cart.push(item);
+    localStorage.setItem('cart', JSON.stringify(cart));
+    alert('Item added to cart!');
+  };
 
   if (isLoading) {
     return (
@@ -274,6 +288,10 @@ const Browse = () => {
                         {item.owner?.firstName || item.owner?.username}
                       </div>
                     </div>
+                    {/* Add to Cart button if not owner */}
+                    {(!user || (item.owner && user._id !== item.owner._id)) && (
+                      <button onClick={() => addToCart(item)} className="mt-2 w-full bg-green-600 text-white py-2 rounded hover:bg-green-700">Add to Cart</button>
+                    )}
                   </div>
                 </div>
               ))}
