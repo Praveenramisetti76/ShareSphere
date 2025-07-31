@@ -25,7 +25,10 @@ const Messages = () => {
 
   useEffect(() => {
     if (selectedConversation) {
-      fetchMessages(selectedConversation.otherUser._id, selectedConversation.itemId);
+      console.log('Selected conversation:', selectedConversation);
+      // Get the item ID from the last message or conversation
+      const itemId = selectedConversation.lastMessage?.item || selectedConversation.itemId;
+      fetchMessages(selectedConversation.otherUser._id, itemId);
     }
   }, [selectedConversation]);
 
@@ -41,6 +44,7 @@ const Messages = () => {
     try {
       setLoading(true);
       const response = await api.get('/api/messages/conversations');
+      console.log('Conversations response:', response.data);
       setConversations(response.data.conversations || []);
     } catch (error) {
       console.error('Failed to fetch conversations:', error);
@@ -51,7 +55,9 @@ const Messages = () => {
 
   const fetchMessages = async (userId, itemId) => {
     try {
+      console.log('Fetching messages for:', { userId, itemId });
       const response = await api.get(`/api/messages/conversation/${userId}/${itemId}`);
+      console.log('Messages response:', response.data);
       setMessages(response.data.messages || []);
     } catch (error) {
       console.error('Failed to fetch messages:', error);
@@ -64,21 +70,42 @@ const Messages = () => {
 
     try {
       setSending(true);
+      
+      // Get the item ID from the conversation
+      const itemId = selectedConversation.lastMessage?.item || selectedConversation.itemId;
+      const receiverId = selectedConversation.otherUser._id;
+      
+      console.log('Sending message:', {
+        receiver: receiverId,
+        item: itemId,
+        content: newMessage.trim(),
+        messageType: 'General'
+      });
+
       const response = await api.post('/api/messages', {
-        receiver: selectedConversation.otherUser._id,
-        item: selectedConversation.itemId,
+        receiver: receiverId,
+        item: itemId,
         content: newMessage.trim(),
         messageType: 'General'
       });
       
+      console.log('Message response:', response.data);
+      
       // Add the new message to the messages list
-      setMessages(prev => [...prev, response.data.messageData]);
+      if (response.data.messageData) {
+        setMessages(prev => [...prev, response.data.messageData]);
+      } else {
+        console.error('No messageData in response:', response.data);
+      }
+      
       setNewMessage('');
       
       // Refresh conversations to update last message
       fetchConversations();
     } catch (error) {
       console.error('Failed to send message:', error);
+      console.error('Error response:', error.response?.data);
+      alert('Failed to send message. Please try again.');
     } finally {
       setSending(false);
     }
@@ -202,6 +229,8 @@ const Messages = () => {
                   const otherUser = conversation.otherUser;
                   const isSelected = selectedConversation?._id === conversation._id;
                   
+                  console.log('Conversation item:', conversation);
+                  
                   return (
                     <div
                       key={conversation._id}
@@ -242,9 +271,9 @@ const Messages = () => {
                               {conversation.lastMessage.content}
                             </p>
                           )}
-                          {conversation.itemTitle && (
+                          {conversation.lastMessage?.item && (
                             <p className="text-xs text-gray-500 truncate">
-                              Re: {conversation.itemTitle}
+                              Re: Item ID: {conversation.lastMessage.item}
                             </p>
                           )}
                         </div>

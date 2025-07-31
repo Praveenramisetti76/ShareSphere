@@ -6,6 +6,22 @@ const { auth, optionalAuth } = require('../middleware/auth');
 
 const router = express.Router();
 
+// @route   GET /api/users
+// @desc    Get all users (for chat selection)
+// @access  Private
+router.get('/', auth, async (req, res) => {
+  try {
+    const users = await User.find({ _id: { $ne: req.user._id } })
+      .select('username firstName lastName avatar email')
+      .sort({ firstName: 1, lastName: 1 });
+    
+    res.json({ users });
+  } catch (error) {
+    console.error('Get users error:', error);
+    res.status(500).json({ message: 'Server error while fetching users' });
+  }
+});
+
 // @route   GET /api/users/:id
 // @desc    Get user profile by ID
 // @access  Public
