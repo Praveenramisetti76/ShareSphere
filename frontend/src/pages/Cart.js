@@ -1,59 +1,33 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
+import { Link } from 'react-router-dom';
 
 const Cart = () => {
-  const [cart, setCart] = useState([]);
-  const [success, setSuccess] = useState(false);
-
-  useEffect(() => {
-    const stored = JSON.parse(localStorage.getItem('cart') || '[]');
-    setCart(stored);
-  }, []);
-
-  const removeFromCart = (id) => {
-    const updated = cart.filter(item => item._id !== id);
-    setCart(updated);
-    localStorage.setItem('cart', JSON.stringify(updated));
-  };
-
-  const proceedToPay = () => {
-    // Mock payment
-    setSuccess(true);
-    localStorage.removeItem('cart');
-  };
-
-  if (success) {
-    return (
-      <div className="min-h-screen flex flex-col items-center justify-center">
-        <h1 className="text-3xl font-bold text-green-700 mb-4">Payment Successful!</h1>
-        <p className="text-gray-700">Thank you for your purchase.</p>
-      </div>
-    );
-  }
-
   return (
     <div className="min-h-screen bg-gray-50 py-8">
-      <div className="max-w-3xl mx-auto px-4 sm:px-6 lg:px-8">
-        <h1 className="text-3xl font-bold text-gray-900 mb-6">My Cart</h1>
-        {cart.length === 0 ? (
-          <div className="text-gray-500">Your cart is empty.</div>
-        ) : (
-          <>
-            <div className="grid grid-cols-1 gap-4 mb-6">
-              {cart.map(item => (
-                <div key={item._id} className="bg-white rounded-lg border p-4 flex items-center gap-4">
-                  <img src={item.images?.[0]} alt={item.title} className="w-24 h-24 object-cover rounded" />
-                  <div className="flex-1">
-                    <h2 className="text-lg font-semibold">{item.title}</h2>
-                    <div className="text-gray-500 text-sm">{item.category} | {item.condition}</div>
-                    <div className="text-gray-900 font-bold">${item.price}</div>
-                  </div>
-                  <button onClick={() => removeFromCart(item._id)} className="bg-red-500 text-white px-3 py-1 rounded">Remove</button>
-                </div>
-              ))}
-            </div>
-            <button onClick={proceedToPay} className="w-full bg-blue-600 text-white py-3 rounded-lg font-semibold text-lg hover:bg-blue-700">Proceed to Pay</button>
-          </>
-        )}
+      <div className="max-w-2xl mx-auto px-4">
+        <div className="bg-white rounded-lg shadow-sm border border-gray-200 p-8 text-center">
+          <h1 className="text-2xl font-bold text-gray-900 mb-4">Cart System Updated</h1>
+          <p className="text-gray-600 mb-6">
+            We've replaced the cart system with a request-based system. Now you can request items directly from owners!
+          </p>
+          <div className="space-y-4">
+            <p className="text-sm text-gray-500">
+              • Browse items and click "Request Item" to send a request to the owner
+            </p>
+            <p className="text-sm text-gray-500">
+              • Owners can approve or reject your requests
+            </p>
+            <p className="text-sm text-gray-500">
+              • Track all your requests in your profile dashboard
+            </p>
+          </div>
+          <Link
+            to="/browse"
+            className="inline-block mt-6 bg-blue-600 text-white px-6 py-3 rounded-lg hover:bg-blue-700 transition-colors"
+          >
+            Browse Items
+          </Link>
+        </div>
       </div>
     </div>
   );

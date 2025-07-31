@@ -9,6 +9,8 @@ const authRoutes = require('./routes/auth');
 const itemRoutes = require('./routes/items');
 const userRoutes = require('./routes/users');
 const messageRoutes = require('./routes/messages');
+const orderRoutes = require('./routes/orders');
+const requestRoutes = require('./routes/requests');
 
 const app = express();
 const PORT = process.env.PORT || 5000;
@@ -33,6 +35,8 @@ app.use('/api/auth', authRoutes);
 app.use('/api/items', itemRoutes);
 app.use('/api/users', userRoutes);
 app.use('/api/messages', messageRoutes);
+app.use('/api/orders', orderRoutes);
+app.use('/api/requests', requestRoutes);
 
 // Health check endpoint
 app.get('/api/health', (req, res) => {
