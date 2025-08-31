@@ -10,10 +10,19 @@
     "install-all": "npm install && cd backend && npm install && cd ../frontend && npm install",
     "build": "cd frontend && npm run build"
   },
-  "keywords": ["sharing", "community", "sustainability", "exchange"],
+  "keywords": [
+    "sharing",
+    "community",
+    "sustainability",
+    "exchange"
+  ],
   "author": "ShareSphere Team",
   "license": "MIT",
   "devDependencies": {
     "concurrently": "^8.2.2"
+  },
+  "dependencies": {
+    "three": "^0.179.1",
+    "vanta": "^0.5.24"
   }
-} 
+}
